@@ -1,0 +1,21 @@
+name: deploy
+
+on:
+  push:
+    branches:
+    - "*"  # run for branches
+    tags:
+    - "*"  # run for tags
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      KBST_DOCKER_IMAGE: runner:${{ github.sha }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '4.x'
+    - run: npm install
+    - run: npm test
