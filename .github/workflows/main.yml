@@ -13,9 +13,7 @@ jobs:
     env:
       GROUP: dreddick 
       COMMIT: ${{ github.sha }}
-      TAG: "TEST"
       REPO: front-end
-      KBST_DOCKER_IMAGE: runner:${{ github.sha }}
       TEST_DOCKER_IMAGE: test:${{ github.sha }}
     steps:
     - uses: actions/checkout@v2
@@ -34,7 +32,7 @@ jobs:
       run: docker run --rm -i -v ${PWD}:/usr/src/app ${TEST_DOCKER_IMAGE} /usr/local/bin/npm test
     - name: Build docker image
       uses: docker/build-push-action@v1
-      #if: startsWith(github.ref, 'refs/tags/v') 
+      if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
       with:
         push: false
         repository: ${{ env.GROUP }}/${{ env.REPO }}
@@ -42,12 +40,13 @@ jobs:
         tag_with_sha: true
         tags: ${{ github.sha }}
     - name: Test docker image
+      if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
       env:
         DOCKER_BUILDKIT: 1
       run: ./test/container.sh
     - name: Push to Docker Hub
       uses: docker/build-push-action@v1
-      #if: startsWith(github.ref, 'refs/tags/v') 
+      if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
