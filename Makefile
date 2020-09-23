@@ -46,7 +46,7 @@ test-image:
 test: test-image
 	@docker run              \
 		--rm                   \
-		-it                    \
+		-i                    \
 		-v $$PWD:/usr/src/app  \
 		$(IMAGE) /usr/local/bin/npm test
 
