@@ -40,6 +40,7 @@ jobs:
         repository: ${{ env.GROUP }}/${{ env.REPO }}
         tag_with_ref: true
         tag_with_sha: true
+        tags: ${{ env.GROUP }}/${{ env.REPO }}:${{ github.sha }}
     - name: Test docker image
       env:
         DOCKER_BUILDKIT: 1
