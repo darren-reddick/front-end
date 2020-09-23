@@ -34,17 +34,19 @@ jobs:
       run: docker run --rm -i -v ${PWD}:/usr/src/app ${TEST_DOCKER_IMAGE} /usr/local/bin/npm test
     - name: Build docker image
       uses: docker/build-push-action@v1
-      if: startsWith(github.ref, 'refs/tags/v') 
+      #if: startsWith(github.ref, 'refs/tags/v') 
       with:
         push: false
         repository: ${{ env.GROUP }}/${{ env.REPO }}
         tag_with_ref: true
         tag_with_sha: true
     - name: Test docker image
+      env:
+        DOCKER_BUILDKIT: 1
       run: ./test/container.sh
     - name: Push to Docker Hub
       uses: docker/build-push-action@v1
-      if: startsWith(github.ref, 'refs/tags/v') 
+      #if: startsWith(github.ref, 'refs/tags/v') 
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
