@@ -33,4 +33,4 @@ jobs:
         DOCKER_BUILDKIT: 1
       run: docker run --rm -i \
             -v ${PWD}:/usr/src/app \
-            $(TEST_DOCKER_IMAGE) /usr/local/bin/npm test
+            ${TEST_DOCKER_IMAGE} /usr/local/bin/npm test
