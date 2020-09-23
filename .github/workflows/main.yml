@@ -1,4 +1,4 @@
-name: deploy
+name: ci
 
 on:
   push:
@@ -8,10 +8,11 @@ on:
     - "*"  # run for tags
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
     env:
       KBST_DOCKER_IMAGE: runner:${{ github.sha }}
+      TEST_DOCKER_IMAGE: test:${{ github.sha }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
@@ -19,3 +20,7 @@ jobs:
         node-version: '4.x'
     - run: npm install
     - run: npm test
+    - name: Build image
+      env:
+        DOCKER_BUILDKIT: 1
+      run: docker build -t $TEST_DOCKER_IMAGE test/
