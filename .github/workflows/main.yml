@@ -28,3 +28,7 @@ jobs:
       env:
         DOCKER_BUILDKIT: 1
       run: docker build -t $TEST_DOCKER_IMAGE test/
+    - name: Test image
+      env:
+        DOCKER_BUILDKIT: 1
+      run: make test
