@@ -11,6 +11,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
+      GROUP: weaveworksdemos 
+      COMMIT: ${{ github.sha }}
+      TAG: "TEST"
+      REPO: front-end
       KBST_DOCKER_IMAGE: runner:${{ github.sha }}
       TEST_DOCKER_IMAGE: test:${{ github.sha }}
     steps:
