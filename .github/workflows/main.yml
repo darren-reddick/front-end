@@ -16,7 +16,7 @@ jobs:
       TAG: "TEST"
       REPO: front-end
       KBST_DOCKER_IMAGE: runner:${{ github.sha }}
-      TEST_DOCKER_IMAGE: test:${{ github.sha }}
+      TEST_DOCKER_IMAGE: test_image
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
