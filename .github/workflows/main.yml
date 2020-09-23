@@ -11,7 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      GROUP: weaveworksdemos 
+      GROUP: dreddick 
       COMMIT: ${{ github.sha }}
       TAG: "TEST"
       REPO: front-end
@@ -32,3 +32,18 @@ jobs:
       env:
         DOCKER_BUILDKIT: 1
       run: docker run --rm -i -v ${PWD}:/usr/src/app ${TEST_DOCKER_IMAGE} /usr/local/bin/npm test
+  publish:
+    needs: [test]
+    name: Publish docker image
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Push to Docker Hub
+      uses: docker/build-push-action@v1
+      if: startsWith(github.ref, 'refs/tags/v') 
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: ${{ env.GROUP }}/${{ env.REPO }}
+        tag_with_ref: true
+        tag_with_sha: true
