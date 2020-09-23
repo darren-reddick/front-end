@@ -17,19 +17,39 @@ jobs:
       TEST_DOCKER_IMAGE: test:${{ github.sha }}
     steps:
     - uses: actions/checkout@v2
+
+    #
+    #
+    # Set up  node
     - uses: actions/setup-node@v1
       with:
         node-version: '4.x'
+
+    #
+    #
+    # Install dependencies
     - run: npm install
-    - run: npm test
+
+    #
+    #
+    # Build docker image for testing
     - name: Build test image
       env:
         DOCKER_BUILDKIT: 1
       run: docker build -t $TEST_DOCKER_IMAGE test/
+
+
+    #
+    #
+    # Run node tests in docker image
     - name: Test image
       env:
         DOCKER_BUILDKIT: 1
       run: docker run --rm -i -v ${PWD}:/usr/src/app ${TEST_DOCKER_IMAGE} /usr/local/bin/npm test
+
+    #
+    #
+    # Build docker image for service
     - name: Build docker image
       uses: docker/build-push-action@v1
       if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
@@ -39,11 +59,19 @@ jobs:
         tag_with_ref: true
         tag_with_sha: true
         tags: ${{ github.sha }}
+
+    #
+    #
+    # Run simple test against built container
     - name: Test docker image
       if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
       env:
         DOCKER_BUILDKIT: 1
       run: ./test/container.sh
+
+    #
+    #
+    # Push to dockerhub
     - name: Push to Docker Hub
       uses: docker/build-push-action@v1
       if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
