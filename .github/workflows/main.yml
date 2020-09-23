@@ -24,11 +24,13 @@ jobs:
         node-version: '4.x'
     - run: npm install
     - run: npm test
-    - name: Build image
+    - name: Build test image
       env:
         DOCKER_BUILDKIT: 1
       run: docker build -t $TEST_DOCKER_IMAGE test/
     - name: Test image
       env:
         DOCKER_BUILDKIT: 1
-      run: make test
+      run: docker run --rm -i \
+            -v ${PWD}:/usr/src/app \
+            $(TEST_DOCKER_IMAGE) /usr/local/bin/npm test
