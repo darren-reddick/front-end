@@ -20,14 +20,14 @@ jobs:
 
     #
     #
-    # Set up  node
+    # Set up  node - this step seems like it is unnecessary
     - uses: actions/setup-node@v1
       with:
         node-version: '4.x'
 
     #
     #
-    # Install dependencies
+    # Install dependencies - this step seems like it is unnecessary
     - run: npm install
 
     #
@@ -45,7 +45,7 @@ jobs:
     - name: Test image
       env:
         DOCKER_BUILDKIT: 1
-      run: docker run --rm -i -v ${PWD}:/usr/src/app ${TEST_DOCKER_IMAGE} /usr/local/bin/npm test
+      run: make test
 
     #
     #
