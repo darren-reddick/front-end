@@ -2,6 +2,7 @@ FROM node:4-alpine
 
 RUN apk update && apk add make
 
+RUN npm install 
 RUN npm install -g phantomjs-prebuilt
 RUN npm install -g casperjs
 
