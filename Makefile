@@ -1,5 +1,5 @@
 IMAGE=front-end
-DOCKER_IFLAG := $(if $(GITHUB_WORKFLOW),"-it","-i")
+DOCKER_IFLAG := $(if $(GITHUB_ACTIONS),"-i","-it")
 
 .PHONY: test coverage
 
