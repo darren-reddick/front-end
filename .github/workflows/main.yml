@@ -15,6 +15,7 @@ jobs:
       COMMIT: ${{ github.sha }}
       REPO: front-end
       TEST_DOCKER_IMAGE: test:${{ github.sha }}
+      DOCKER_IMAGE: ${{ env.GROUP }}/${{ env.REPO }}
     steps:
     - uses: actions/checkout@v2
 
@@ -55,7 +56,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
       with:
         push: false
-        repository: ${{ env.GROUP }}/${{ env.REPO }}
+        repository: ${{ env.DOCKER_IMAGE }}
         tag_with_ref: true
         tag_with_sha: true
         tags: ${{ github.sha }}
@@ -78,6 +79,6 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: ${{ env.GROUP }}/${{ env.REPO }}
+        repository: ${{ env.DOCKER_IMAGE }}
         tag_with_ref: true
         tag_with_sha: true
